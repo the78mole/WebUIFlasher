@@ -1,0 +1,7 @@
+fetchdir: ./tmpfw
+
+sources:
+  - type: local
+    name: blinkenlights
+    platform: pio
+    path: ./KM271-WIFI-Test/

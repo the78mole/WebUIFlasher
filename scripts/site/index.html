@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 Firmware Flash Tool</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="main-content">
+            <h1>🔧 ESP32 Firmware Flash Tool</h1>
+
+            <div class="header-info">
+                <p><strong>📋 Available Firmware:</strong> This tool allows you to flash ESP32 firmware directly from
+                    your
+                    browser.</p>
+                <p><strong>💡 Note:</strong> Make sure your ESP32 device is connected via USB before flashing.</p>
+            </div>
+
+            <div class="action-buttons">
+                <button class="refresh-btn">🔄 Refresh List</button>
+                <button class="update-firmware-btn">📥 Update Firmware</button>
+            </div>
+
+            <div class="port-selection">
+                <label for="serial-port-select"><strong>🔌 Serial Port:</strong></label>
+                <select id="serial-port-select" class="port-dropdown">
+                    <option value="auto">⏳ Loading ports...</option>
+                </select>
+                <button class="refresh-ports-btn" title="Refresh Serial Ports">🔄</button>
+            </div>
+
+            <div id="loading" class="loading">
+                ⏳ Loading firmware list...
+            </div>
+
+            <div id="error" class="error" style="display: none;">
+                ❌ <span id="error-message"></span>
+            </div>
+
+            <table id="firmware-table" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Platform</th>
+                        <th>Version</th>
+                        <th>Size</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="firmware-list">
+                </tbody>
+            </table>
+
+            <div class="status-info">
+                <p><strong>Status Legend:</strong></p>
+                <p>✅ <strong>Available:</strong> Firmware binary is ready for flashing</p>
+                <p>❌ <strong>Not Available:</strong> Run <code>uv run scripts/update_firmwares.py</code> to download</p>
+            </div>
+        </div>
+
+        <!-- Terminal Widget -->
+        <div class="terminal-section">
+            <div class="terminal-header">
+                <div class="terminal-title">
+                    <span class="terminal-icon">💻</span>
+                    <span class="terminal-label">ESP32 Terminal</span>
+                </div>
+                <div class="terminal-controls">
+                    <button class="terminal-btn" onclick="terminal.runEsptoolCommand('flash-id')"
+                        title="Get Flash ID">🔍 Flash ID</button>
+                    <button class="terminal-btn" onclick="terminal.runEsptoolCommand('chip-id')" title="Get Chip ID">🆔
+                        Chip ID</button>
+                    <button class="terminal-btn" id="clear-terminal" title="Clear Terminal">🗑️ Clear</button>
+                    <button class="terminal-btn" id="scroll-lock" title="Toggle Auto-Scroll">📌 Lock</button>
+                    <button class="terminal-btn terminal-collapse" id="toggle-terminal"
+                        title="Collapse/Expand">➖</button>
+                </div>
+            </div>
+            <div class="terminal-content" id="terminal-content">
+                <div class="terminal-output" id="terminal-output">
+                    <div class="terminal-line terminal-info">
+                        <span class="terminal-prompt">esp32@webflash:~$</span>
+                        <span class="terminal-text">Welcome to ESP32 Terminal</span>
+                    </div>
+                    <div class="terminal-line terminal-info">
+                        <span class="terminal-prompt">esp32@webflash:~$</span>
+                        <span class="terminal-text">Ready for commands...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
