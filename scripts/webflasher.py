@@ -166,6 +166,12 @@ def get_firmware_list() -> list[dict]:
 
 
 # API Routes - diese müssen vor dem Static Mount stehen
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for Docker containers."""
+    return {"status": "healthy", "service": "WebUIFlasher"}
+
+
 @app.get("/api/firmware", response_model=list[dict])
 async def api_get_firmware():
     """Get list of available firmware as JSON."""
