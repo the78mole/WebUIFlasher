@@ -1,6 +1,50 @@
 # WebUIFlasher
 This project aims to provide a Web service to flash connected targets with different firmware, e.g. for small series production
 
+## Screenshots
+
+### Desktop Interface
+![PC Screenshot](img/pc-screenshot.png)
+*Web interface on desktop showing firmware list and flashing controls*
+
+### Mobile Interface
+<div align="center">
+  <img src="img/smartphone-screenshot-main.jpg" alt="Mobile Main View" width="300">
+  
+  <img src="img/smartphone-screenshot-chipid.jpg" alt="Mobile Terminal View" width="300">
+</div>
+
+*Mobile-responsive interface with main firmware view (left) and terminal output (right)*
+
+## Web Interface Features
+
+The WebUIFlasher provides a user-friendly web interface for ESP32 firmware flashing:
+
+### 🔧 Firmware Management
+- **Automatic firmware discovery** from configured sources (GitHub releases, local builds)
+- **Version tracking** with visual status indicators (✅ available, ❌ needs download)
+- **One-click flashing** directly from the browser
+- **Serial port selection** with auto-detection
+
+### 💻 Interactive Terminal
+- **Real-time output** during flashing operations via WebSocket
+- **ESPTool integration** with buttons for common operations:
+  - `flash-id`: Read SPI flash memory information
+  - `chip-id`: Display ESP32 chip identification
+- **Auto-scroll** and manual scroll lock options
+- **Clear terminal** and expand/collapse functionality
+
+### 📱 Mobile-Responsive Design
+- **Touch-friendly interface** optimized for mobile devices
+- **Responsive layout** that adapts to different screen sizes
+- **Full functionality** on smartphones and tablets
+
+### 🚀 Getting Started
+1. Run the setup script: `./setup-dev.sh`
+2. Download firmware: `uv run scripts/update_firmwares.py --sources=sources.yaml`
+3. Start web server: `uv run scripts/webflasher.py`
+4. Open browser: `http://localhost:8000`
+
 ## Firmware Development Setup
 
 This directory contains all firmware-related files and scripts for the KM271-WiFi project.
