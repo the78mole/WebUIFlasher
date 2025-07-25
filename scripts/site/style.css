@@ -139,8 +139,7 @@ tr:hover {
 
 /* Button Styles */
 .refresh-btn,
-.refresh-ports-btn,
-.update-firmware-btn {
+.refresh-ports-btn {
     background: #007acc;
     color: white;
     border: none;
@@ -157,10 +156,32 @@ tr:hover {
     /* Disable double-tap zoom */
 }
 
+.update-firmware-btn,
+.api-docs-btn {
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    min-height: 44px;
+    /* Minimum touch target size */
+    touch-action: manipulation;
+    /* Disable double-tap zoom */
+}
+
 .refresh-btn:hover,
-.refresh-ports-btn:hover,
-.update-firmware-btn:hover {
+.refresh-ports-btn:hover {
     background: #005a9e;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.update-firmware-btn:hover,
+.api-docs-btn:hover {
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
@@ -180,6 +201,15 @@ tr:hover {
 
 .update-firmware-btn:hover {
     background: #218838;
+}
+
+.api-docs-btn {
+    background: #17a2b8;
+    margin-left: 10px;
+}
+
+.api-docs-btn:hover {
+    background: #138496;
 }
 
 .update-firmware-btn.updating {
@@ -347,7 +377,8 @@ tr:hover {
     /* Make buttons larger and more touch-friendly */
     .refresh-btn,
     .refresh-ports-btn,
-    .update-firmware-btn {
+    .update-firmware-btn,
+    .api-docs-btn {
         padding: 12px 20px;
         font-size: 16px;
         min-height: 48px;

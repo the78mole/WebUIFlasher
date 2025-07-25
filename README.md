@@ -45,6 +45,21 @@ The WebUIFlasher provides a user-friendly web interface for ESP32 firmware flash
 3. Start web server: `uv run scripts/webflasher.py`
 4. Open browser: `http://localhost:8000`
 
+### 🔌 API Access
+The WebUIFlasher also provides a REST API for programmatic access:
+
+- **Interactive API Documentation**: `http://localhost:8000/docs` (Swagger UI)
+- **Alternative API Docs**: `http://localhost:8000/redoc` (ReDoc)
+- **OpenAPI Schema**: `http://localhost:8000/openapi.json`
+
+**Available Endpoints:**
+- `GET /api/firmware` - List available firmware
+- `GET /api/serial-ports` - List available serial ports
+- `POST /api/flash` - Flash firmware to device
+- `WebSocket /ws/terminal` - Real-time terminal output
+
+This allows integration with CI/CD pipelines, automated testing, or custom applications.
+
 ## Firmware Development Setup
 
 This directory contains all firmware-related files and scripts for ESP32 device management and flashing.
