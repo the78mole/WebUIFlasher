@@ -7,8 +7,12 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./firmware:/app/firmware
-      - ./sources:/app/sources
+      # Mount firmware download directory
+      - ./tmpfw:/app/tmpfw
+      # Mount sources configuration (external injection)
+      - ./sources.yaml:/app/sources.yaml:ro
+      # Optional: Mount custom firmware sources
+      - ./img:/app/img:ro
       # Specific TTY devices only (adjust as needed)
       - /dev/ttyUSB0:/dev/ttyUSB0
       - /dev/ttyUSB1:/dev/ttyUSB1
@@ -16,6 +20,9 @@ services:
     restart: unless-stopped
     environment:
       - TZ=Europe/Berlin
+      - PYTHONUNBUFFERED=1
+      - WEBFLASHER_HOST=0.0.0.0
+      - WEBFLASHER_PORT=8000
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s

@@ -9,13 +9,21 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./firmware:/app/firmware
-      - ./sources:/app/sources
+      # Mount firmware download directory
+      - ./tmpfw:/app/tmpfw
+      # Mount sources configuration (external injection)
+      - ./sources.yaml:/app/sources.yaml:ro
+      # Optional: Mount custom firmware sources
+      - ./img:/app/img:ro
+      # Mount entire /dev for USB access
       - /dev:/dev
     privileged: true
     restart: unless-stopped
     environment:
       - TZ=Europe/Berlin
+      - PYTHONUNBUFFERED=1
+      - WEBFLASHER_HOST=0.0.0.0
+      - WEBFLASHER_PORT=8000
       - WEBUI_TITLE=My Custom ESP Flasher
       - WEBUI_THEME=dark
     healthcheck:

@@ -3,6 +3,11 @@
 .gitignore
 .github
 
+# Sources configuration files (must be mounted from outside)
+sources.yaml
+sources_example.yaml
+sources*.yaml
+
 # Python
 __pycache__
 *.pyc

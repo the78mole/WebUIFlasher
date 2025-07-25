@@ -18,7 +18,7 @@ WORKDIR /app
 # Copy project files
 COPY pyproject.toml uv.lock ./
 COPY scripts/ ./scripts/
-COPY sources.yaml ./
+# NOTE: sources.yaml and sources_example.yaml are NOT copied - they must be mounted from outside
 COPY img/ ./img/
 COPY README.md ./
 COPY docker-entrypoint.sh ./
@@ -41,7 +41,7 @@ EXPOSE 8000
 
 # Add healthcheck
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:8000/api/firmware || exit 1
+  CMD curl -f http://localhost:8000/health || exit 1
 
 # Set entrypoint (using root for better device access)
 ENTRYPOINT ["./docker-entrypoint.sh"]
