@@ -112,6 +112,62 @@ async function updateFirmware() {
     }, 5000);
 }
 
+let isMonitoring = false;
+let currentMonitorPort = null;
+
+async function toggleSerialMonitor() {
+    const button = document.getElementById('toggle-monitor');
+    const portSelect = document.getElementById('serial-port-select');
+    const baudSelect = document.getElementById('baud-rate-select');
+    
+    
+    if (!isMonitoring) {
+        // Start monitoring
+        const selectedPort = portSelect.value;
+        const selectedBaud = baudSelect.value;
+        
+        
+        if (selectedPort === 'auto') {
+            terminal.addMessage('error', '❌ Please select a specific serial port for monitoring');
+            return;
+        }
+        
+        // Update button state
+        button.innerHTML = '⏹️ Stop Monitor';
+        button.classList.add('monitoring');
+        button.title = 'Stop Serial Monitor';
+        isMonitoring = true;
+        currentMonitorPort = selectedPort;
+        
+        
+        // Show terminal
+        terminal.show();
+        
+        // Send monitor command via WebSocket
+        const command = { 
+            port: selectedPort, 
+            baudrate: selectedBaud 
+        };
+        terminal.sendCommand('monitor', command);
+        
+    } else {
+        // Stop monitoring
+        
+        button.innerHTML = '📊 Monitor';
+        button.classList.remove('monitoring');
+        button.title = 'Start Serial Monitor';
+        isMonitoring = false;
+        
+        // Send stop monitor command
+        if (currentMonitorPort) {
+            terminal.sendCommand('stop_monitor', { 
+                port: currentMonitorPort 
+            });
+            currentMonitorPort = null;
+        }
+    }
+}
+
 async function flashFirmware(name) {
     const button = document.getElementById('flash-' + name);
     const originalHTML = button.innerHTML;
@@ -224,6 +280,12 @@ document.addEventListener('DOMContentLoaded', () => {
         updateFirmwareBtn.addEventListener('click', updateFirmware);
     }
 
+    // Handle monitor button
+    const monitorBtn = document.getElementById('toggle-monitor');
+    if (monitorBtn) {
+        monitorBtn.addEventListener('click', toggleSerialMonitor);
+    }
+
     // Initialize terminal
     terminal = new Terminal();
 
@@ -273,6 +335,7 @@ class Terminal {
 
     handleWebSocketMessage(data) {
         const { type, message, timestamp } = data;
+        
 
         switch (type) {
             case 'info':
@@ -302,6 +365,10 @@ class Terminal {
             case 'warning':
                 this.addLine(message, 'warning', false);
                 break;
+            case 'monitor':
+                // Monitor messages are shown as output with special styling
+                this.addLine(message, 'monitor', false);
+                break;
             case 'pong':
                 // Handle ping/pong silently
                 break;
@@ -312,10 +379,11 @@ class Terminal {
 
     sendCommand(type, data) {
         if (this.websocket && this.websocket.readyState === WebSocket.OPEN) {
-            this.websocket.send(JSON.stringify({
+            const message = JSON.stringify({
                 type: type,
                 ...data
-            }));
+            });
+            this.websocket.send(message);
         } else {
             this.addLine('❌ WebSocket not connected', 'error', false);
         }
@@ -389,6 +457,10 @@ class Terminal {
         if (this.autoScroll) {
             this.scrollToBottom();
         }
+    }
+
+    addMessage(type, text) {
+        this.addLine(text, type, false);
     }
 
     updateOrAddLine(text, type = 'progress', showPrompt = false) {

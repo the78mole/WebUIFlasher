@@ -34,6 +34,25 @@
                 <button class="refresh-ports-btn" title="Refresh Serial Ports">🔄</button>
             </div>
 
+            <div class="monitor-controls">
+                <label for="baud-rate-select"><strong>⚡ Baud Rate:</strong></label>
+                <select id="baud-rate-select" class="port-dropdown baud-dropdown">
+                    <option value="9600">9600</option>
+                    <option value="19200">19200</option>
+                    <option value="38400">38400</option>
+                    <option value="57600">57600</option>
+                    <option value="74880">74880 (ESP8266)</option>
+                    <option value="115200" selected>115200 (Standard)</option>
+                    <option value="230400">230400</option>
+                    <option value="460800">460800</option>
+                    <option value="921600">921600</option>
+                    <option value="1500000">1500000</option>
+                    <option value="2000000">2000000</option>
+                </select>
+                
+                <button class="monitor-btn" id="toggle-monitor" title="Start Serial Monitor">📊 Monitor</button>
+            </div>
+
             <div id="loading" class="loading">
                 ⏳ Loading firmware list...
             </div>
