@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  webuiflasher:
+    image: ghcr.io/the78mole/webuiflasher:latest
+    container_name: webuiflasher-secure
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./firmware:/app/firmware
+      - ./sources:/app/sources
+      # Specific TTY devices only (adjust as needed)
+      - /dev/ttyUSB0:/dev/ttyUSB0
+      - /dev/ttyUSB1:/dev/ttyUSB1
+      - /dev/ttyACM0:/dev/ttyACM0
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Berlin
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    user: root
+    group_add:
+      - dialout

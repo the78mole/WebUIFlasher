@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  webuiflasher-custom:
+    build:
+      context: ..
+      dockerfile: examples/Dockerfile.extended
+    container_name: webuiflasher-custom
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./firmware:/app/firmware
+      - ./sources:/app/sources
+      - /dev:/dev
+    privileged: true
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Berlin
+      - WEBUI_TITLE=My Custom ESP Flasher
+      - WEBUI_THEME=dark
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

@@ -1,0 +1,35 @@
+# WebUIFlasher Extended Example
+# This Dockerfile shows how to extend the WebUIFlasher base image
+# with custom firmware, configurations, or additional tools
+
+FROM ghcr.io/the78mole/webuiflasher:latest
+
+# Install additional tools (optional)
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    wget \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy custom firmware files
+COPY examples/custom-firmware/ /app/firmware/custom/
+
+# Copy custom source configurations
+COPY examples/custom-sources.yaml /app/sources.yaml
+
+# Copy custom web assets (optional)
+COPY examples/custom-site/ /app/scripts/site/custom/
+
+# Set custom environment variables
+ENV CUSTOM_FIRMWARE_PATH=/app/firmware/custom
+ENV WEBUI_TITLE="Custom ESP Flasher"
+ENV WEBUI_THEME="dark"
+
+# Create custom entrypoint script
+COPY examples/custom-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/custom-entrypoint.sh
+
+# Use custom entrypoint that calls the original
+ENTRYPOINT ["/usr/local/bin/custom-entrypoint.sh"]
+CMD ["python", "/app/scripts/webflasher.py"]
