@@ -60,6 +60,86 @@ The WebUIFlasher also provides a REST API for programmatic access:
 
 This allows integration with CI/CD pipelines, automated testing, or custom applications.
 
+## 🐳 Docker Deployment
+
+WebUIFlasher provides two Docker deployment options for different security requirements.
+
+### Quick Start with Docker
+
+**Option 1: Standard Setup (Recommended)**
+```bash
+# Clone repository and build locally
+git clone https://github.com/the78mole/WebUIFlasher.git
+cd WebUIFlasher
+make up
+```
+
+**Option 2: Use Pre-built Image**
+```bash
+# Download and run latest release
+docker run -d \
+  --name webui-flasher \
+  --privileged \
+  -p 8000:8000 \
+  -v /dev:/dev \
+  ghcr.io/the78mole/webuiflasher:latest
+```
+
+### Docker Compose Configurations
+
+**Standard Setup (`docker-compose.yml`)**
+- **Full USB access** with `/dev` mount
+- **Privileged mode** for maximum hardware compatibility
+- **Recommended for development and ease of use**
+
+**Secure Setup (`docker-compose.selected-tty.yaml`)**
+- **Selected USB devices only** (ttyUSB*, ttyACM*)
+- **Non-privileged mode** for production environments
+- **Better security isolation**
+
+### Available Commands
+
+```bash
+make help          # Show all available commands
+make up            # Start standard setup (full USB access)
+make secure        # Start secure setup (selected devices only)
+make down          # Stop the service
+make secure-down   # Stop secure service
+make logs          # Show service logs
+make build         # Build Docker image locally
+```
+
+### Docker Images
+
+**GitHub Container Registry:**
+- Latest: `ghcr.io/the78mole/webuiflasher:latest`
+- Specific version: `ghcr.io/the78mole/webuiflasher:v1.0.0`
+
+**Supported Platforms:**
+- `linux/amd64` (Intel/AMD)
+- `linux/arm64` (ARM64/Apple Silicon)
+
+### USB Device Access
+The docker-compose.yml maps common USB serial devices:
+- `/dev/ttyUSB0`, `/dev/ttyUSB1` - USB-to-serial adapters
+- `/dev/ttyACM0`, `/dev/ttyACM1` - Arduino/ESP32 devices
+
+**Custom USB devices:**
+```yaml
+devices:
+  - /dev/ttyUSB2:/dev/ttyUSB2  # Add your specific device
+```
+
+### Development Mode
+```bash
+# Start with development profile (more permissive USB access)
+docker-compose --profile dev up -d webflasher-dev
+```
+
+### Environment Variables
+- `WEBFLASHER_HOST`: Server bind address (default: 0.0.0.0)
+- `WEBFLASHER_PORT`: Server port (default: 8000)
+
 ## Firmware Development Setup
 
 This directory contains all firmware-related files and scripts for ESP32 device management and flashing.

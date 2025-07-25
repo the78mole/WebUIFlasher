@@ -1,0 +1,52 @@
+# Git
+.git
+.gitignore
+.github
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Downloaded firmware
+tmpfw/*
+!tmpfw/.gitkeep
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Documentation (except README.md which is needed in container)
+*.md
+!README.md
+
+# Test files
+test-*
+
+# Docker files (not needed in image)
+docker-compose*.yml
+Dockerfile.*
+.dockerignore
+
+# CI/CD
+.github/
+*.tar.gz
+*.zip
+
+# Release artifacts
+release-artifacts/

@@ -1,0 +1,39 @@
+services:
+  webflasher:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webui-flasher
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount firmware download directory
+      - ./tmpfw:/app/tmpfw
+      # Mount sources configuration
+      - ./sources.yaml:/app/sources.yaml:ro
+      # Optional: Mount custom firmware sources
+      - ./img:/app/img:ro
+    devices:
+      # Map specific USB serial devices into container (only existing ones)
+      # Add/remove devices as needed based on your system
+      # - /dev/ttyUSB0:/dev/ttyUSB0
+      # - /dev/ttyUSB1:/dev/ttyUSB1
+      - /dev/ttyUSB2:/dev/ttyUSB2
+      # - /dev/ttyACM0:/dev/ttyACM0
+      # - /dev/ttyACM1:/dev/ttyACM1
+    privileged: false
+    environment:
+      - PYTHONUNBUFFERED=1
+      - WEBFLASHER_HOST=0.0.0.0
+      - WEBFLASHER_PORT=8000
+    restart: unless-stopped
+    networks:
+      - webflasher-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webflasher.rule=Host(`webflasher.local`)"
+      - "traefik.http.services.webflasher.loadbalancer.server.port=8000"
+
+networks:
+  webflasher-network:
+    driver: bridge

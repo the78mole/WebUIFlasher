@@ -19,6 +19,11 @@ __pycache__/
 venv/
 env/
 ENV/
+.venv/
+
+# Docker
+.docker/
+docker-compose.override.yml
 
 # IDE and editor files
 .vscode/
