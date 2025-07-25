@@ -10,7 +10,7 @@ This project aims to provide a Web service to flash connected targets with diffe
 ### Mobile Interface
 <div align="center">
   <img src="img/smartphone-screenshot-main.jpg" alt="Mobile Main View" width="300">
-  
+
   <img src="img/smartphone-screenshot-chipid.jpg" alt="Mobile Terminal View" width="300">
 </div>
 
@@ -47,13 +47,12 @@ The WebUIFlasher provides a user-friendly web interface for ESP32 firmware flash
 
 ## Firmware Development Setup
 
-This directory contains all firmware-related files and scripts for the KM271-WiFi project.
+This directory contains all firmware-related files and scripts for ESP32 device management and flashing.
 
 ### Quick Start
 
 1. **Run setup script:**
    ```bash
-   cd FW
    ./setup-dev.sh
    ```
 
@@ -65,16 +64,18 @@ This directory contains all firmware-related files and scripts for the KM271-WiF
 ### Structure
 
 ```
-FW/
+WebUIFlasher/
 ├── setup-dev.sh              # Local development setup script
 ├── pyproject.toml             # Python project configuration
 ├── uv.lock                    # Dependency lock file
-├── scripts/                   # Python scripts
-│   └── update_firmwares.py    # Firmware download script
 ├── sources.yaml               # Firmware sources configuration
-├── ESPhome/                   # ESPHome projects
-├── KM271-WIFI-Test/           # PlatformIO project
-└── KM271-dewenni/             # Additional firmware projects
+├── scripts/                   # Python scripts
+│   ├── webflasher.py          # Web interface server
+│   ├── update_firmwares.py    # Firmware download script
+│   ├── flash_firmware.py      # Command-line flashing
+│   └── site/                  # Web UI assets (HTML, CSS, JS)
+├── tmpfw/                     # Downloaded firmware binaries
+└── img/                       # Screenshots and documentation images
 ```
 
 ### Development
@@ -92,22 +93,6 @@ uv add <package-name>
 
 # Run Python scripts
 uv run <script-name>
-```
-
-#### PlatformIO
-
-For ESP32 hardware development:
-
-```bash
-# Build project
-cd KM271-WIFI-Test
-pio run
-
-# Upload firmware (hardware must be connected)
-pio run --target upload
-
-# Serial monitor
-pio device monitor
 ```
 
 #### Firmware Download
