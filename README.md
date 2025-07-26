@@ -66,26 +66,85 @@ WebUIFlasher provides two Docker deployment options for different security requi
 
 ### Quick Start with Docker
 
+**Important:** You must provide a `sources.yaml` configuration file for the container to work!
+
 **Option 1: Standard Setup (Recommended)**
 ```bash
 # Clone repository and build locally
 git clone https://github.com/the78mole/WebUIFlasher.git
 cd WebUIFlasher
+# Create your sources configuration
+cp sources_example.yaml sources.yaml
+# Edit sources.yaml with your firmware repositories
 make up
 ```
 
 **Option 2: Use Pre-built Image**
+
+First, create your sources.yaml configuration file
+
+```yaml
+fetchdir: ./tmpfw
+
+sources:
+  - type: github
+    platform: pio
+    name: km271-wifi-test
+    repo: the78mole/KM271-WIFI-Test
+    asset_pattern: "^KM271-WIFI-esp32dev-factory-${revision}.bin$"
+
+  - type: github
+    platform: esphome
+    name: km271-esphome
+    repo: the78mole/ESPhome-KM271-WiFi
+    asset_pattern: "^km271-for-friends-esp32.factory.bin$"
+# ...
+```
+
+Then run the container with mounted sources.yaml
+
 ```bash
-# Download and run latest release
 docker run -d \
   --name webui-flasher \
   --privileged \
   -p 8000:8000 \
+  -v "$(pwd)/sources.yaml:/app/sources.yaml:ro" \
+  -v "$(pwd)/tmpfw:/app/tmpfw" \
   -v /dev:/dev \
   ghcr.io/the78mole/webuiflasher:latest
 ```
 
+> **⚠️ Security Note:** The `sources.yaml` file is never included in the Docker image for security reasons. You must mount it from outside the container.
+
 ### Docker Compose Configurations
+
+All Docker Compose configurations require a `sources.yaml` file in the same directory!
+
+**Before starting any Docker Compose setup:** Create your sources configuration
+
+```yaml
+fetchdir: ./tmpfw
+
+sources:
+  - type: github
+    platform: pio
+    name: km271-wifi-test
+    repo: the78mole/KM271-WIFI-Test
+    asset_pattern: "^KM271-WIFI-esp32dev-factory-${revision}.bin$"
+
+  - type: github
+    platform: esphome
+    name: km271-esphome
+    repo: the78mole/ESPhome-KM271-WiFi
+    asset_pattern: "^km271-for-friends-esp32.factory.bin$"
+# ...
+```
+
+Then run your chosen compose configuration
+
+```bash
+docker compose up -d
+```
 
 **Standard Setup (`docker-compose.yml`)**
 - **Full USB access** with `/dev` mount
@@ -139,6 +198,35 @@ docker-compose --profile dev up -d webflasher-dev
 ### Environment Variables
 - `WEBFLASHER_HOST`: Server bind address (default: 0.0.0.0)
 - `WEBFLASHER_PORT`: Server port (default: 8000)
+
+## 📝 Configuration: sources.yaml
+
+The `sources.yaml` file defines which firmware repositories to download and flash. This file is **required** for all operations.
+
+### Example Configuration
+```yaml
+fetchdir: ./tmpfw
+
+sources:
+  - type: github
+    platform: pio
+    name: my-esp32-firmware
+    repo: username/my-esp32-project
+    asset_pattern: "^firmware-esp32-${revision}.bin$"
+    
+  - type: local
+    name: custom-firmware
+    platform: pio
+    path: ./my-local-firmware/
+# ...
+```
+
+### Source Types
+- **`github`**: Download from GitHub releases
+- **`local`**: Use local firmware files
+- **`local_pio`**: Build with PlatformIO from local source
+
+> **💡 Important:** For Docker deployments, the `sources.yaml` file must be present in the same directory as your `docker-compose.yml` file, as it gets mounted into the container.
 
 ## Firmware Development Setup
 
@@ -277,6 +365,32 @@ uv run scripts/flash_firmware.py km271-esphome -l -p /dev/ttyUSB1 -b 115200
 - Press 'n' or ESC to stop and show statistics
 
 ### Troubleshooting
+
+**Docker: sources.yaml not found error:**
+```bash
+# Make sure sources.yaml exists in the same directory as docker-compose.yml
+ls -la sources.yaml
+
+# If not, create it from the example
+cp sources_example.yaml sources.yaml
+```
+
+**Docker: Container exits immediately:**
+```bash
+# Check container logs
+docker compose logs webflasher
+
+# Usually caused by missing sources.yaml file
+```
+
+**Docker: No firmware appears in web interface:**
+```bash
+# Check if tmpfw directory has content
+ls -la tmpfw/
+
+# Check container logs for download errors
+docker compose logs webflasher
+```
 
 **uv not found:**
 ```bash
