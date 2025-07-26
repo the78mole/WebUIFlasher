@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   webuiflasher:
-    image: ghcr.io/the78mole/webuiflasher:v0.0.9
+    image: ghcr.io/the78mole/webuiflasher:0.0.13
     container_name: webuiflasher-pinned
     ports:
       - "8000:8000"
