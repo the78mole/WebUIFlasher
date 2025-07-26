@@ -359,11 +359,6 @@ uv run scripts/flash_firmware.py blinkenlights --loop
 uv run scripts/flash_firmware.py km271-esphome -l -p /dev/ttyUSB1 -b 115200
 ```
 
-**Batch Production:**
-- Flash device → Success message
-- Press any key to continue with next device
-- Press 'n' or ESC to stop and show statistics
-
 ### Troubleshooting
 
 **Docker: sources.yaml not found error:**
