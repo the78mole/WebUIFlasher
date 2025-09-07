@@ -22,6 +22,8 @@ services:
       - PYTHONUNBUFFERED=1
       - WEBFLASHER_HOST=0.0.0.0
       - WEBFLASHER_PORT=8000
+      # Optional: GitHub token for higher rate limits
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s

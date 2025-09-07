@@ -20,7 +20,11 @@ class GitHubSource(FirmwareSource):
         self.repo_name = config["repo"]
         self.asset_pattern = config["asset_pattern"]
         self.current_version = config.get("current_version", "")
-        self.github_client = Github()
+        
+        # Initialize GitHub client with token if available
+        github_token = self._get_github_token()
+        self.github_client = Github(github_token) if github_token else Github()
+        self.using_token = bool(github_token)
 
     def download(
         self, target_dir: str, show_progress: bool = True, quiet: bool = False
@@ -54,11 +58,23 @@ class GitHubSource(FirmwareSource):
             )
 
         except GithubException as e:
-            print(f"❌ GitHub API error: {e}")
+            if e.status == 403 and "rate limit" in str(e).lower():
+                print("❌ GitHub Rate Limit exceeded!")
+                if not self.using_token:
+                    print("💡 Tip: Set GITHUB_TOKEN env var for higher limits")
+                    print("   Example: export GITHUB_TOKEN=your_personal_access_token")
+                else:
+                    print("   Even with token, rate limit exceeded. Please wait.")
+            else:
+                print(f"❌ GitHub API error: {e}")
             return False
         except Exception as e:
             print(f"❌ Error: {e}")
             return False
+
+    def _get_github_token(self) -> str | None:
+        """Get GitHub token from environment variable."""
+        return os.getenv("GITHUB_TOKEN")
 
     def get_info(self) -> dict[str, str]:
         """Get information about this GitHub source."""
@@ -74,6 +90,7 @@ class GitHubSource(FirmwareSource):
                 "target_version": target_release.tag_name,
                 "pattern": self.asset_pattern,
                 "current_version": self.current_version,
+                "using_token": str(self.using_token),
             }
         except Exception:
             return {
@@ -83,12 +100,17 @@ class GitHubSource(FirmwareSource):
                 "target_version": self.current_version or "latest",
                 "pattern": self.asset_pattern,
                 "current_version": self.current_version,
+                "using_token": str(self.using_token),
             }
 
     def _print_header(self):
         """Print a header for this source."""
         print("\n" + "━" * 60)
         print(f"📦 {self.name} ({self.repo_name})")
+        if self.using_token:
+            print("🔐 Using GitHub token (higher rate limits)")
+        else:
+            print("🔓 No GitHub token (rate limits may apply)")
         print("━" * 60)
 
     def _get_resolved_pattern(self, version: str) -> str:

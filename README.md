@@ -196,8 +196,21 @@ docker-compose --profile dev up -d webflasher-dev
 ```
 
 ### Environment Variables
+
 - `WEBFLASHER_HOST`: Server bind address (default: 0.0.0.0)
 - `WEBFLASHER_PORT`: Server port (default: 8000)
+- `GITHUB_TOKEN`: GitHub personal access token for higher API rate limits (optional)
+
+**GitHub Token Usage:**
+
+```bash
+# Set token for higher GitHub API rate limits (5000 vs 60 requests/hour)
+export GITHUB_TOKEN=ghp_your_personal_access_token
+
+# With Docker Compose
+echo "GITHUB_TOKEN=ghp_your_personal_access_token" > .env
+docker compose up -d
+```
 
 ## 📝 Configuration: sources.yaml
 
