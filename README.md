@@ -108,6 +108,7 @@ docker run -d \
   --name webui-flasher \
   --privileged \
   -p 8000:8000 \
+  -e GITHUB_TOKEN=your_token_here \
   -v "$(pwd)/sources.yaml:/app/sources.yaml:ro" \
   -v "$(pwd)/tmpfw:/app/tmpfw" \
   -v /dev:/dev \
