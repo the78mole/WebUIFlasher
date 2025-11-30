@@ -398,6 +398,13 @@ class Terminal {
     }
 
     runEsptoolCommand(command) {
+        // Special confirmation for erase-flash command
+        if (command === 'erase-flash') {
+            if (!confirm('⚠️ WARNING: This will completely erase the ESP32 flash memory!\n\nAll data, firmware, and settings will be deleted.\n\nAre you sure you want to continue?')) {
+                return;
+            }
+        }
+
         this.show();
 
         // Get selected port from dropdown
