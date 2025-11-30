@@ -53,6 +53,8 @@ max-line-length = 88
 [tool.ruff]
 line-length = 88
 target-version = "py312"
+
+[tool.ruff.lint]
 select = [
     "E",  # pycodestyle errors
     "W",  # pycodestyle warnings
@@ -69,3 +71,21 @@ testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
 python_functions = ["test_*"]
 addopts = "--verbose --tb=short"
+
+[tool.bandit]
+exclude_dirs = ["tests", "tmpfw", ".venv"]
+skips = [
+    "B101",  # Skip assert_used warnings
+    "B104",  # Skip hardcoded_bind_all_interfaces (web server needs 0.0.0.0)
+    "B110",  # Skip try_except_pass warnings
+    "B113",  # Skip request_without_timeout (stream downloads)
+    "B404",  # Skip subprocess import warnings (needed for esptool/pio)
+    "B603",  # Skip subprocess warnings (controlled input)
+    "B607",  # Skip partial executable path warnings (pio is in PATH)
+    "B601",  # Skip shell=True warnings
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.3.0",
+]

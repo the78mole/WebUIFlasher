@@ -20,7 +20,7 @@ class GitHubSource(FirmwareSource):
         self.repo_name = config["repo"]
         self.asset_pattern = config["asset_pattern"]
         self.current_version = config.get("current_version", "")
-        
+
         # Initialize GitHub client with token if available
         github_token = self._get_github_token()
         self.github_client = Github(github_token) if github_token else Github()

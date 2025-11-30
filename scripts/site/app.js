@@ -119,49 +119,49 @@ async function toggleSerialMonitor() {
     const button = document.getElementById('toggle-monitor');
     const portSelect = document.getElementById('serial-port-select');
     const baudSelect = document.getElementById('baud-rate-select');
-    
-    
+
+
     if (!isMonitoring) {
         // Start monitoring
         const selectedPort = portSelect.value;
         const selectedBaud = baudSelect.value;
-        
-        
+
+
         if (selectedPort === 'auto') {
             terminal.addMessage('error', '❌ Please select a specific serial port for monitoring');
             return;
         }
-        
+
         // Update button state
         button.innerHTML = '⏹️ Stop Monitor';
         button.classList.add('monitoring');
         button.title = 'Stop Serial Monitor';
         isMonitoring = true;
         currentMonitorPort = selectedPort;
-        
-        
+
+
         // Show terminal
         terminal.show();
-        
+
         // Send monitor command via WebSocket
-        const command = { 
-            port: selectedPort, 
-            baudrate: selectedBaud 
+        const command = {
+            port: selectedPort,
+            baudrate: selectedBaud
         };
         terminal.sendCommand('monitor', command);
-        
+
     } else {
         // Stop monitoring
-        
+
         button.innerHTML = '📊 Monitor';
         button.classList.remove('monitoring');
         button.title = 'Start Serial Monitor';
         isMonitoring = false;
-        
+
         // Send stop monitor command
         if (currentMonitorPort) {
-            terminal.sendCommand('stop_monitor', { 
-                port: currentMonitorPort 
+            terminal.sendCommand('stop_monitor', {
+                port: currentMonitorPort
             });
             currentMonitorPort = null;
         }
@@ -335,7 +335,7 @@ class Terminal {
 
     handleWebSocketMessage(data) {
         const { type, message, timestamp } = data;
-        
+
 
         switch (type) {
             case 'info':

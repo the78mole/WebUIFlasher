@@ -1,13 +1,16 @@
 # WebUIFlasher
+
 This project aims to provide a Web service to flash connected targets with different firmware, e.g. for small series production
 
 ## Screenshots
 
 ### Desktop Interface
+
 ![PC Screenshot](img/pc-screenshot.png)
 *Web interface on desktop showing firmware list and flashing controls*
 
 ### Mobile Interface
+
 <div align="center">
   <img src="img/smartphone-screenshot-main.jpg" alt="Mobile Main View" width="300">
 
@@ -21,12 +24,14 @@ This project aims to provide a Web service to flash connected targets with diffe
 The WebUIFlasher provides a user-friendly web interface for ESP32 firmware flashing:
 
 ### 🔧 Firmware Management
+
 - **Automatic firmware discovery** from configured sources (GitHub releases, local builds)
 - **Version tracking** with visual status indicators (✅ available, ❌ needs download)
 - **One-click flashing** directly from the browser
 - **Serial port selection** with auto-detection
 
 ### 💻 Interactive Terminal
+
 - **Real-time output** during flashing operations via WebSocket
 - **ESPTool integration** with buttons for common operations:
   - `flash-id`: Read SPI flash memory information
@@ -35,17 +40,20 @@ The WebUIFlasher provides a user-friendly web interface for ESP32 firmware flash
 - **Clear terminal** and expand/collapse functionality
 
 ### 📱 Mobile-Responsive Design
+
 - **Touch-friendly interface** optimized for mobile devices
 - **Responsive layout** that adapts to different screen sizes
 - **Full functionality** on smartphones and tablets
 
 ### 🚀 Getting Started
+
 1. Run the setup script: `./setup-dev.sh`
 2. Download firmware: `uv run scripts/update_firmwares.py --sources=sources.yaml`
 3. Start web server: `uv run scripts/webflasher.py`
 4. Open browser: `http://localhost:8000`
 
 ### 🔌 API Access
+
 The WebUIFlasher also provides a REST API for programmatic access:
 
 - **Interactive API Documentation**: `http://localhost:8000/docs` (Swagger UI)
@@ -53,6 +61,7 @@ The WebUIFlasher also provides a REST API for programmatic access:
 - **OpenAPI Schema**: `http://localhost:8000/openapi.json`
 
 **Available Endpoints:**
+
 - `GET /api/firmware` - List available firmware
 - `GET /api/serial-ports` - List available serial ports
 - `POST /api/flash` - Flash firmware to device
@@ -69,6 +78,7 @@ WebUIFlasher provides two Docker deployment options for different security requi
 **Important:** You must provide a `sources.yaml` configuration file for the container to work!
 
 **Option 1: Standard Setup (Recommended)**
+
 ```bash
 # Clone repository and build locally
 git clone https://github.com/the78mole/WebUIFlasher.git
@@ -115,7 +125,9 @@ docker run -d \
   ghcr.io/the78mole/webuiflasher:latest
 ```
 
-> **⚠️ Security Note:** The `sources.yaml` file is never included in the Docker image for security reasons. You must mount it from outside the container.
+> **⚠️ Security Note:** The `sources.yaml` file is never included in the
+> Docker image for security reasons. You must mount it from outside the
+> container.
 
 ### Docker Compose Configurations
 
@@ -148,11 +160,13 @@ docker compose up -d
 ```
 
 **Standard Setup (`docker-compose.yml`)**
+
 - **Full USB access** with `/dev` mount
 - **Privileged mode** for maximum hardware compatibility
 - **Recommended for development and ease of use**
 
 **Secure Setup (`docker-compose.selected-tty.yaml`)**
+
 - **Selected USB devices only** (ttyUSB*, ttyACM*)
 - **Non-privileged mode** for production environments
 - **Better security isolation**
@@ -172,25 +186,31 @@ make build         # Build Docker image locally
 ### Docker Images
 
 **GitHub Container Registry:**
+
 - Latest: `ghcr.io/the78mole/webuiflasher:latest`
 - Specific version: `ghcr.io/the78mole/webuiflasher:v1.0.0`
 
 **Supported Platforms:**
+
 - `linux/amd64` (Intel/AMD)
 - `linux/arm64` (ARM64/Apple Silicon)
 
 ### USB Device Access
+
 The docker-compose.yml maps common USB serial devices:
+
 - `/dev/ttyUSB0`, `/dev/ttyUSB1` - USB-to-serial adapters
 - `/dev/ttyACM0`, `/dev/ttyACM1` - Arduino/ESP32 devices
 
 **Custom USB devices:**
+
 ```yaml
 devices:
   - /dev/ttyUSB2:/dev/ttyUSB2  # Add your specific device
 ```
 
 ### Development Mode
+
 ```bash
 # Start with development profile (more permissive USB access)
 docker-compose --profile dev up -d webflasher-dev
@@ -209,7 +229,7 @@ docker-compose --profile dev up -d webflasher-dev
 export GITHUB_TOKEN=ghp_your_personal_access_token
 
 # With Docker Compose
-echo "GITHUB_TOKEN=ghp_your_personal_access_token" > .env
+echo "GITHUB_TOKEN=ghp_your_personal_access_token" > .env  # pragma: allowlist secret
 docker compose up -d
 ```
 
@@ -218,6 +238,7 @@ docker compose up -d
 The `sources.yaml` file defines which firmware repositories to download and flash. This file is **required** for all operations.
 
 ### Example Configuration
+
 ```yaml
 fetchdir: ./tmpfw
 
@@ -227,7 +248,7 @@ sources:
     name: my-esp32-firmware
     repo: username/my-esp32-project
     asset_pattern: "^firmware-esp32-${revision}.bin$"
-    
+
   - type: local
     name: custom-firmware
     platform: pio
@@ -236,11 +257,14 @@ sources:
 ```
 
 ### Source Types
+
 - **`github`**: Download from GitHub releases
 - **`local`**: Use local firmware files
 - **`local_pio`**: Build with PlatformIO from local source
 
-> **💡 Important:** For Docker deployments, the `sources.yaml` file must be present in the same directory as your `docker-compose.yml` file, as it gets mounted into the container.
+> **💡 Important:** For Docker deployments, the `sources.yaml` file must be
+> present in the same directory as your `docker-compose.yml` file, as it gets
+> mounted into the container.
 
 ## Firmware Development Setup
 
@@ -249,11 +273,13 @@ This directory contains all firmware-related files and scripts for ESP32 device 
 ### Quick Start
 
 1. **Run setup script:**
+
    ```bash
    ./setup-dev.sh
    ```
 
 2. **Download firmware:**
+
    ```bash
    uv run scripts/update_firmwares.py --sources=sources.yaml
    ```
@@ -325,9 +351,34 @@ The following tools are automatically installed:
 - **PlatformIO**: Hardware development platform
 - **Development Tools**: black, ruff, pylint, pytest
 
+### Code Quality
+
+The project uses pre-commit hooks to ensure code quality:
+
+```bash
+# Install pre-commit hooks
+uv run pre-commit install
+
+# Run hooks manually
+uv run pre-commit run --all-files
+
+# Update hooks to latest versions
+uv run pre-commit autoupdate
+```
+
+Pre-commit checks include:
+
+- Code formatting (black, ruff)
+- Linting (ruff, pylint)
+- Security checks (bandit)
+- Dockerfile linting (hadolint)
+- YAML/Markdown linting
+- Secret detection
+
 ### Scripts
 
 #### `scripts/update_firmwares.py`
+
 Downloads and builds all firmware images defined in sources.yaml.
 
 ```bash
@@ -345,6 +396,7 @@ uv run scripts/update_firmwares.py --sources=custom.yaml
 ```
 
 #### `scripts/generate_release_description.py`
+
 Generates GitHub release descriptions from version information.
 
 ```bash
@@ -356,6 +408,7 @@ uv run scripts/generate_release_description.py --versions=custom_versions.json -
 ```
 
 #### `scripts/flash_firmware.py`
+
 Flash firmware to ESP32 devices with support for batch production.
 
 ```bash
@@ -376,6 +429,7 @@ uv run scripts/flash_firmware.py km271-esphome -l -p /dev/ttyUSB1 -b 115200
 ### Troubleshooting
 
 **Docker: sources.yaml not found error:**
+
 ```bash
 # Make sure sources.yaml exists in the same directory as docker-compose.yml
 ls -la sources.yaml
@@ -385,6 +439,7 @@ cp sources_example.yaml sources.yaml
 ```
 
 **Docker: Container exits immediately:**
+
 ```bash
 # Check container logs
 docker compose logs webflasher
@@ -393,6 +448,7 @@ docker compose logs webflasher
 ```
 
 **Docker: No firmware appears in web interface:**
+
 ```bash
 # Check if tmpfw directory has content
 ls -la tmpfw/
@@ -402,6 +458,7 @@ docker compose logs webflasher
 ```
 
 **uv not found:**
+
 ```bash
 # Install uv if not available
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -410,6 +467,7 @@ pip install uv
 ```
 
 **PlatformIO USB access:**
+
 ```bash
 # Add user to dialout group (Linux)
 sudo usermod -a -G dialout $USER
@@ -417,6 +475,7 @@ sudo usermod -a -G dialout $USER
 ```
 
 **Virtual environment issues:**
+
 ```bash
 # Recreate venv
 rm -rf .venv

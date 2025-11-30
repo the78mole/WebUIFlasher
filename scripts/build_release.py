@@ -50,7 +50,7 @@ def main():
 
     # Load sources configuration
     try:
-        with open(sources_file, "r") as f:
+        with open(sources_file) as f:
             config = yaml.safe_load(f)
             sources_list = config.get("sources", [])
             # Override fetchdir if specified in config
@@ -102,9 +102,8 @@ def main():
             print(f"❌ Configuration error: {e}")
             failed_downloads += 1
         except Exception as e:
-            print(
-                f"❌ Unexpected error with source {source_config.get('name', 'unknown')}: {e}"
-            )
+            source_name = source_config.get("name", "unknown")
+            print(f"❌ Unexpected error with source {source_name}: {e}")
             failed_downloads += 1
 
     # Save version information
@@ -121,7 +120,7 @@ def main():
     # Summary
     total = successful_downloads + failed_downloads
     if not quiet:
-        print(f"\n🎉 Release build complete!")
+        print("\n🎉 Release build complete!")
         print(f"   ✅ Successful: {successful_downloads}/{total}")
         if failed_downloads > 0:
             print(f"   ❌ Failed: {failed_downloads}/{total}")

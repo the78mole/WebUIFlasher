@@ -84,20 +84,20 @@ jobs:
           name: WebUIFlasher v${{ steps.semver.outputs.version }}
           body: |
             ## What's Changed
-            
+
             Docker images available at:
             - `ghcr.io/${{ github.repository }}:${{ steps.semver.outputs.version }}`
             - `ghcr.io/${{ github.repository }}:latest`
-            
+
             ### Usage
             ```bash
             # Standard setup (full /dev access)
             docker compose up -d
-            
+
             # Secure setup (selected TTY devices)
             docker compose -f docker-compose.selected-tty.yaml up -d
             ```
-            
+
             ### Supported Architectures
             - linux/amd64
             - linux/arm64

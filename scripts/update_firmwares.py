@@ -3,7 +3,8 @@
 Firmware Downloader for KM271 Projects
 
 Usage:
-  update_firmwares.py [--sources=<yaml>] [--fetchdir=<dir>] [--no-progress] [--quiet] [--save-versions]
+  update_firmwares.py [--sources=<yaml>] [--fetchdir=<dir>]
+                      [--no-progress] [--quiet] [--save-versions]
   update_firmwares.py (-h | --help)
   update_firmwares.py --version
 

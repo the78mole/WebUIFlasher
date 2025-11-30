@@ -3,25 +3,31 @@
 ## Quick Start
 
 1. **Create your sources configuration:**
+
    ```bash
    cp sources_example.yaml sources.yaml
    # Edit sources.yaml with your firmware repositories
    ```
 
 2. **Start the container:**
+
    ```bash
    docker-compose up -d
    ```
 
 3. **Access the web interface:**
-   Open http://localhost:8000 in your browser
+   Open <http://localhost:8000> in your browser
 
 ## Configuration Files
 
 ### sources.yaml (Required)
-The `sources.yaml` file defines which firmware repositories to fetch from. It **must** be mounted from outside the container for security and flexibility.
+
+The `sources.yaml` file defines which firmware repositories to fetch from.
+It **must** be mounted from outside the container for security and
+flexibility.
 
 **Example:**
+
 ```yaml
 fetchdir: ./tmpfw
 
@@ -60,6 +66,7 @@ sources:
 ## Troubleshooting
 
 ### Container fails to start with "sources.yaml not found"
+
 ```bash
 # Make sure you have a sources.yaml file in your current directory
 ls -la sources.yaml
@@ -69,6 +76,7 @@ cp sources_example.yaml sources.yaml
 ```
 
 ### No firmware appears in web interface
+
 ```bash
 # Check if tmpfw directory has content
 ls -la tmpfw/
@@ -78,6 +86,7 @@ docker-compose logs webuiflasher
 ```
 
 ### USB devices not detected
+
 ```bash
 # Check if devices are mapped correctly
 docker-compose exec webuiflasher ls -la /dev/ttyUSB* /dev/ttyACM*

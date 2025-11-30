@@ -12,7 +12,6 @@ sys.path.insert(0, str(scripts_dir))
 
 if __name__ == "__main__":
     import uvicorn
-
     from webflasher import app
 
     print("🚀 Starting ESP32 Firmware Flash Web Tool...")
@@ -20,6 +19,4 @@ if __name__ == "__main__":
     print("🔧 API documentation: http://localhost:8000/docs")
     print("💡 Press Ctrl+C to stop")
 
-    uvicorn.run(
-        app, host="0.0.0.0", port=8000, reload=True, log_level="info"
-    )
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True, log_level="info")

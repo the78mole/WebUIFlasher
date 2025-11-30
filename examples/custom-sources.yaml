@@ -10,7 +10,7 @@ github_sources:
       - esp32
       - esp32s2
       - esp32s3
-    
+
   - name: "iot-sensor-firmware"
     repo: "your-org/iot-sensor-project"
     path: "dist/"
@@ -23,7 +23,7 @@ local_sources:
   - name: "development-builds"
     path: "/app/firmware/custom/dev-builds"
     description: "Local development firmware builds"
-    
+
   - name: "production-releases"
     path: "/app/firmware/custom/production"
     description: "Tested production firmware releases"
