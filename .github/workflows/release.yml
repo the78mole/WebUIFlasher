@@ -26,7 +26,7 @@ jobs:
 
       - name: Generate release version
         id: semver
-        uses: paulhatch/semantic-version@v5.4.0
+        uses: paulhatch/semantic-version@v6.0.4
         with:
           branch: main
           tag_prefix: "v"
